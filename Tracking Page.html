@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Your Parcel - Smart Courier Hub</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #f39c12;
+            --secondary-color: #e67e22;
+            --accent-color: #d35400;
+            --light-color: #fef9e7;
+            --dark-color: #7e5109;
+            --success-color: #27ae60;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+        }
+        
+        .navbar {
+            background-color: var(--primary-color);
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white !important;
+        }
+        
+        .tracking-hero {
+            background: linear-gradient(rgba(243, 156, 18, 0.9), rgba(243, 156, 18, 0.9)), url('https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .tracking-card {
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: -50px;
+            background-color: white;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .status-card {
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .status-card.completed {
+            border-left-color: var(--success-color);
+        }
+        
+        .status-card.in-progress {
+            border-left-color: var(--secondary-color);
+        }
+        
+        .status-card.pending {
+            border-left-color: #f39c12;
+        }
+        
+        .status-icon {
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            margin-top: 20px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #eee;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 30px;
+        }
+        
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: -30px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            border: 3px solid white;
+        }
+        
+        .timeline-item.completed .timeline-dot {
+            background-color: var(--success-color);
+        }
+        
+        .timeline-item.in-progress .timeline-dot {
+            background-color: var(--secondary-color);
+        }
+        
+        .timeline-item.pending .timeline-dot {
+            background-color: #f39c12;
+        }
+        
+        .parcel-details {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        .detail-value {
+            margin-bottom: 15px;
+        }
+        
+        .map-container {
+            height: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #eee;
+            margin-bottom: 20px;
+        }
+        
+        .not-found {
+            text-align: center;
+            padding: 50px 0;
+        }
+        
+        .not-found-icon {
+            font-size: 5rem;
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-box-open me-2"></i>Smart Courier Hub
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="For Merchants_Tracking.html">For Merchants</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="For Couriers_Tracking.html">For Couriers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Track Parcel</a>
+                    </li>
+                    <li class="nav-item ms-lg-3">
+                        <a class="btn btn-primary" href="#">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="tracking-hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <h1 class="mb-4">Track Your Parcel</h1>
+                    <p class="lead mb-0">Enter your tracking number to get real-time updates on your delivery</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tracking Form -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="tracking-card">
+                        <form id="trackingForm">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control form-control-lg" id="trackingNumber" placeholder="Enter your tracking number" required>
+                                <button class="btn btn-primary" type="submit" id="trackButton">
+                                    <i class="fas fa-search me-2"></i>Track
+                                </button>
+                            </div>
+                            <div class="form-text">Example tracking numbers: SCH-123456, SCH-654321, SCH-987654</div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tracking Results -->
+            <div class="row mt-4" id="trackingResults" style="display: none;">
+                <div class="col-lg-8">
+                    <div class="status-card" id="statusCard">
+                        <div class="d-flex align-items-center">
+                            <div class="status-icon text-success">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div>
+                                <h4 id="parcelStatus">Parcel Status</h4>
+                                <p class="mb-0" id="statusDetails">Status details will appear here</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="parcel-details mt-4">
+                        <h4 class="mb-4">Parcel Details</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="detail-label">Tracking Number</p>
+                                <p class="detail-value" id="detailTrackingNo">-</p>
+                                
+                                <p class="detail-label">Sender</p>
+                                <p class="detail-value" id="detailSender">-</p>
+                                
+                                <p class="detail-label">Recipient</p>
+                                <p class="detail-value" id="detailRecipient">-</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="detail-label">Parcel Type</p>
+                                <p class="detail-value" id="detailType">-</p>
+                                
+                                <p class="detail-label">Weight</p>
+                                <p class="detail-value" id="detailWeight">-</p>
+                                
+                                <p class="detail-label">Payment Method</p>
+                                <p class="detail-value" id="detailPayment">-</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="map-container mt-4">
+                        <div style="width: 100%; height: 100%; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center;">
+                            <div class="text-center p-4">
+                                <i class="fas fa-map-marked-alt fa-3x mb-3" style="color: var(--primary-color);"></i>
+                                <h5>Delivery Route Map</h5>
+                                <p class="text-muted" id="mapStatus">Map visualization will appear here with tracking data</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tracking-status mt-4">
+                        <h4 class="mb-4">Tracking History</h4>
+                        <div class="timeline" id="timeline">
+                            <!-- Timeline items will be inserted here by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Not Found Message -->
+            <div class="row mt-4" id="notFoundMessage" style="display: none;">
+                <div class="col-lg-8">
+                    <div class="not-found">
+                        <div class="not-found-icon">
+                            <i class="fas fa-box-open"></i>
+                        </div>
+                        <h3>Parcel Not Found</h3>
+                        <p class="lead">We couldn't find any parcel with that tracking number.</p>
+                        <p>Please check the number and try again. If you believe this is an error, contact our support team.</p>
+                        <a href="#" class="btn btn-primary mt-3">
+                            <i class="fas fa-headset me-2"></i>Contact Support
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const trackingForm = document.getElementById('trackingForm');
+            const trackingResults = document.getElementById('trackingResults');
+            const notFoundMessage = document.getElementById('notFoundMessage');
+            
+            // Dummy tracking data
+            const dummyTrackingData = {
+                'SCH-123456': {
+                    status: 'Delivered',
+                    statusClass: 'completed',
+                    statusIcon: 'fa-check-circle',
+                    statusColor: 'text-success',
+                    trackingNo: 'SCH-123456',
+                    sender: 'Dhaka Electronics, Gulshan-1, Dhaka',
+                    recipient: 'Mohammad Ali, Mirpur-10, Dhaka',
+                    type: 'Electronics',
+                    weight: '2.5 kg',
+                    payment: 'Cash on Delivery (৳120)',
+                    timeline: [
+                        { status: 'Delivered', date: 'June 15, 2023 at 3:45 PM', details: 'Parcel delivered to recipient', class: 'completed' },
+                        { status: 'Out for Delivery', date: 'June 15, 2023 at 11:30 AM', details: 'Parcel is with delivery rider (Rahim, 01712-345678)', class: 'completed' },
+                        { status: 'At Local Facility', date: 'June 15, 2023 at 9:15 AM', details: 'Parcel arrived at Mirpur distribution center', class: 'completed' },
+                        { status: 'In Transit', date: 'June 14, 2023 at 5:20 PM', details: 'Parcel departed from Gulshan hub', class: 'completed' },
+                        { status: 'Parcel Collected', date: 'June 14, 2023 at 2:00 PM', details: 'Parcel collected from sender at Gulshan-1', class: 'completed' },
+                        { status: 'Order Processed', date: 'June 14, 2023 at 1:30 PM', details: 'Order received and processing started', class: 'completed' }
+                    ]
+                },
+                'SCH-654321': {
+                    status: 'In Transit',
+                    statusClass: 'in-progress',
+                    statusIcon: 'fa-truck',
+                    statusColor: 'text-primary',
+                    trackingNo: 'SCH-654321',
+                    sender: 'Fashion House, Banani, Dhaka',
+                    recipient: 'Fatima Begum, Dhanmondi, Dhaka',
+                    type: 'Clothing',
+                    weight: '1.2 kg',
+                    payment: 'Prepaid (৳85)',
+                    timeline: [
+                        { status: 'In Transit', date: 'June 16, 2023 at 10:00 AM', details: 'Parcel is on the way to Dhanmondi', class: 'in-progress' },
+                        { status: 'At Local Facility', date: 'June 16, 2023 at 8:30 AM', details: 'Parcel arrived at Banani hub', class: 'completed' },
+                        { status: 'Parcel Collected', date: 'June 15, 2023 at 4:45 PM', details: 'Parcel collected from sender', class: 'completed' },
+                        { status: 'Order Processed', date: 'June 15, 2023 at 3:00 PM', details: 'Order received and processing started', class: 'completed' }
+                    ]
+                },
+                'SCH-987654': {
+                    status: 'Processing',
+                    statusClass: 'pending',
+                    statusIcon: 'fa-spinner',
+                    statusColor: 'text-warning',
+                    trackingNo: 'SCH-987654',
+                    sender: 'Book World, Uttara, Dhaka',
+                    recipient: 'Rahim Khan, Mohammadpur, Dhaka',
+                    type: 'Books',
+                    weight: '3.0 kg',
+                    payment: 'Cash on Delivery (৳150)',
+                    timeline: [
+                        { status: 'Processing', date: 'June 17, 2023 at 2:00 PM', details: 'Parcel is being prepared for dispatch', class: 'pending' },
+                        { status: 'Order Received', date: 'June 17, 2023 at 1:30 PM', details: 'Order received from merchant', class: 'completed' }
+                    ]
+                }
+            };
+
+            trackingForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const trackingNumber = document.getElementById('trackingNumber').value.trim();
+                const statusCard = document.getElementById('statusCard');
+                const timeline = document.getElementById('timeline');
+                
+                // Hide both sections initially
+                trackingResults.style.display = 'none';
+                notFoundMessage.style.display = 'none';
+                
+                // Check if tracking number exists in dummy data
+                if (dummyTrackingData[trackingNumber]) {
+                    const parcel = dummyTrackingData[trackingNumber];
+                    
+                    // Update status card
+                    document.getElementById('parcelStatus').textContent = parcel.status;
+                    document.getElementById('statusDetails').textContent = `Last updated: ${parcel.timeline[0].date}`;
+                    
+                    // Update status icon
+                    const statusIcon = document.querySelector('#statusCard .status-icon');
+                    statusIcon.className = `status-icon ${parcel.statusColor}`;
+                    statusIcon.innerHTML = `<i class="fas ${parcel.statusIcon}"></i>`;
+                    
+                    // Update status card class
+                    statusCard.className = `status-card ${parcel.statusClass}`;
+                    
+                    // Update parcel details
+                    document.getElementById('detailTrackingNo').textContent = parcel.trackingNo;
+                    document.getElementById('detailSender').textContent = parcel.sender;
+                    document.getElementById('detailRecipient').textContent = parcel.recipient;
+                    document.getElementById('detailType').textContent = parcel.type;
+                    document.getElementById('detailWeight').textContent = parcel.weight;
+                    document.getElementById('detailPayment').textContent = parcel.payment;
+                    
+                    // Update map status
+                    document.getElementById('mapStatus').textContent = parcel.status === 'Delivered' 
+                        ? 'Delivery completed' 
+                        : `Parcel is ${parcel.status.toLowerCase()}`;
+                    
+                    // Update timeline
+                    timeline.innerHTML = '';
+                    parcel.timeline.forEach(item => {
+                        const timelineItem = document.createElement('div');
+                        timelineItem.className = `timeline-item ${item.class}`;
+                        timelineItem.innerHTML = `
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <h5>${item.status}</h5>
+                                <p class="text-muted">${item.date}</p>
+                                <p>${item.details}</p>
+                            </div>
+                        `;
+                        timeline.appendChild(timelineItem);
+                    });
+                    
+                    // Show tracking results
+                    trackingResults.style.display = 'block';
+                } else {
+                    // Show not found message
+                    notFoundMessage.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

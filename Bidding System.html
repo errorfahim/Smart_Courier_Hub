@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courier Bidding Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #f39c12;
+            --secondary-color: #e67e22;
+            --accent-color: #d35400;
+            --light-color: #fef9e7;
+            --dark-color: #7e5109;
+            --success-color: #27ae60;
+            --info-color: #3498db;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+        }
+        .navbar {
+            background-color: var(--primary-color);
+            padding: 15px 0;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white !important;
+        }
+        .nav-link {
+            color: white !important;
+            margin: 0 10px;
+            font-weight: 500;
+        }
+        .nav-link:hover {
+            color: var(--dark-color) !important;
+        }
+        .btn-primary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+        .delivery-card {
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+            background-color: white;
+        }
+        .delivery-card:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
+        }
+        .bid-card {
+            border-left: 4px solid var(--info-color);
+            margin-bottom: 10px;
+        }
+        .my-bid {
+            border-left: 4px solid var(--success-color);
+            background-color: rgba(39, 174, 96, 0.05);
+        }
+        .winning-bid {
+            border-left: 4px solid var(--success-color);
+            background-color: rgba(39, 174, 96, 0.1);
+        }
+        .form-card {
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            background-color: white;
+        }
+        .tab-content {
+            padding: 20px 0;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="#"><i class="fas fa-box-open me-2"></i>Smart Courier Hub</a>
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#available"><i class="fas fa-box-open"></i> Available Deliveries</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#my-bids"><i class="fas fa-hand-holding-usd"></i> My Bids</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#assigned"><i class="fas fa-truck-loading"></i> Assigned Deliveries</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container my-5">
+        <!-- Available Deliveries Tab -->
+        <div id="available" class="tab-content">
+            <h2 class="mb-4">Available Deliveries</h2>
+            
+            <!-- Delivery 1 -->
+            <div class="delivery-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h5>Order #DEL-87421</h5>
+                        <p class="mb-1"><i class="fas fa-user"></i> Sarah Johnson</p>
+                        <p class="mb-1"><i class="fas fa-map-marker-alt"></i> 3.5 miles (Warehouse to Downtown)</p>
+                    </div>
+                    <span class="badge bg-primary">5 Bids</span>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><i class="fas fa-box"></i> Medium package (2.5kg)</p>
+                        <p><i class="fas fa-clock"></i> Due: Today 6:00 PM</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><i class="fas fa-info-circle"></i> Fragile items - Handle with care</p>
+                        <p><i class="fas fa-dollar-sign"></i> Current lowest bid: $12.50</p>
+                    </div>
+                </div>
+                <hr>
+                <h6>Current Bids:</h6>
+                <div class="bid-card p-3 mb-2">
+                    <div class="d-flex justify-content-between">
+                        <span><strong>Courier #1245</strong>: $12.50</span>
+                        <small class="text-muted">10 mins ago</small>
+                    </div>
+                </div>
+                <div class="bid-card p-3 mb-2">
+                    <div class="d-flex justify-content-between">
+                        <span><strong>Courier #8921</strong>: $13.00</span>
+                        <small class="text-muted">15 mins ago</small>
+                    </div>
+                </div>
+                <div class="bid-card p-3 mb-2 my-bid">
+                    <div class="d-flex justify-content-between">
+                        <span><strong>You</strong>: $11.75</span>
+                        <small class="text-muted">5 mins ago</small>
+                    </div>
+                </div>
+                <div class="input-group mt-3">
+                    <span class="input-group-text">$</span>
+                    <input type="number" class="form-control" placeholder="Your bid amount" value="11.00" min="10.00" step="0.25">
+                    <button class="btn btn-primary">Place Bid</button>
+                </div>
+                <small class="text-muted d-block mt-1">Minimum bid: $10.00</small>
+            </div>
+            
+            <!-- Delivery 2 -->
+            <div class="delivery-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h5>Order #DEL-87235</h5>
+                        <p class="mb-1"><i class="fas fa-user"></i> Michael Brown</p>
+                        <p class="mb-1"><i class="fas fa-map-marker-alt"></i> 8.2 miles (Northside to Suburbia)</p>
+                    </div>
+                    <span class="badge bg-primary">3 Bids</span>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><i class="fas fa-box"></i> Large package (5.8kg)</p>
+                        <p><i class="fas fa-clock"></i> Due: Tomorrow 10:00 AM</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><i class="fas fa-info-circle"></i> No special instructions</p>
+                        <p><i class="fas fa-dollar-sign"></i> Current lowest bid: $18.00</p>
+                    </div>
+                </div>
+                <hr>
+                <h6>Current Bids:</h6>
+                <div class="bid-card p-3 mb-2">
+                    <div class="d-flex justify-content-between">
+                        <span><strong>Courier #4512</strong>: $18.00</span>
+                        <small class="text-muted">25 mins ago</small>
+                    </div>
+                </div>
+                <div class="bid-card p-3 mb-2">
+                    <div class="d-flex justify-content-between">
+                        <span><strong>Courier #7821</strong>: $19.50</span>
+                        <small class="text-muted">30 mins ago</small>
+                    </div>
+                </div>
+                <div class="bid-card p-3 mb-2 winning-bid">
+                    <div class="d-flex justify-content-between">
+                        <span><strong>Courier #1245</strong>: $17.75</span>
+                        <small class="text-muted">5 mins ago</small>
+                    </div>
+                </div>
+                <div class="input-group mt-3">
+                    <span class="input-group-text">$</span>
+                    <input type="number" class="form-control" placeholder="Your bid amount" value="17.50" min="15.00" step="0.25">
+                    <button class="btn btn-primary">Place Bid</button>
+                </div>
+                <small class="text-muted d-block mt-1">Minimum bid: $15.00</small>
+            </div>
+        </div>
+
+        <!-- My Bids Tab -->
+        <div id="my-bids" class="tab-content hidden">
+            <h2 class="mb-4">My Active Bids</h2>
+            
+            <div class="delivery-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h5>Order #DEL-87421</h5>
+                        <p class="mb-1"><i class="fas fa-user"></i> Sarah Johnson</p>
+                        <p class="mb-1"><i class="fas fa-map-marker-alt"></i> 3.5 miles</p>
+                    </div>
+                    <span class="badge bg-info">Bidding Open</span>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><i class="fas fa-box"></i> Medium package (2.5kg)</p>
+                        <p><i class="fas fa-clock"></i> Due: Today 6:00 PM</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><i class="fas fa-dollar-sign"></i> <strong>Your bid:</strong> $11.75</p>
+                        <p><i class="fas fa-trophy"></i> <strong>Current winning bid:</strong> $11.50</p>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between mt-3">
+                    <button class="btn btn-outline-secondary">Increase Bid</button>
+                    <button class="btn btn-outline-danger">Withdraw Bid</button>
+                </div>
+            </div>
+            
+            <div class="delivery-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h5>Order #DEL-87192</h5>
+                        <p class="mb-1"><i class="fas fa-user"></i> Emily Wilson</p>
+                        <p class="mb-1"><i class="fas fa-map-marker-alt"></i> 1.8 miles</p>
+                    </div>
+                    <span class="badge bg-warning">Pending Acceptance</span>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><i class="fas fa-box"></i> Small package (0.8kg)</p>
+                        <p><i class="fas fa-clock"></i> Due: Tomorrow 2:00 PM</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><i class="fas fa-dollar-sign"></i> <strong>Your bid:</strong> $8.25</p>
+                        <p><i class="fas fa-check-circle"></i> <strong>Lowest bid</strong> (3 total bids)</p>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between mt-3">
+                    <button class="btn btn-outline-secondary disabled">Bid Closed</button>
+                    <button class="btn btn-outline-danger">Withdraw Bid</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assigned Deliveries Tab -->
+        <div id="assigned" class="tab-content hidden">
+            <h2 class="mb-4">My Assigned Deliveries</h2>
+            
+            <div class="delivery-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h5>Order #DEL-87364</h5>
+                        <p class="mb-1"><i class="fas fa-user"></i> David Thompson</p>
+                        <p class="mb-1"><i class="fas fa-map-marker-alt"></i> 4.2 miles</p>
+                    </div>
+                    <span class="badge bg-success">Accepted Bid: $14.00</span>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><i class="fas fa-box"></i> Large package (6.2kg)</p>
+                        <p><i class="fas fa-clock"></i> Due: Today 4:30 PM</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><i class="fas fa-info-circle"></i> Requires signature</p>
+                        <p><i class="fas fa-truck"></i> Ready for pickup</p>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 mt-3">
+                    <button class="btn btn-primary">Start Delivery</button>
+                </div>
+            </div>
+            
+            <div class="delivery-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h5>Order #DEL-87289</h5>
+                        <p class="mb-1"><i class="fas fa-user"></i> Jessica Lee</p>
+                        <p class="mb-1"><i class="fas fa-map-marker-alt"></i> 2.7 miles</p>
+                    </div>
+                    <span class="badge bg-success">Accepted Bid: $9.50</span>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><i class="fas fa-box"></i> Small package (1.2kg)</p>
+                        <p><i class="fas fa-clock"></i> Due: Tomorrow 11:00 AM</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><i class="fas fa-info-circle"></i> Fragile - Handle with care</p>
+                        <p><i class="fas fa-clock"></i> Pickup available after 9:00 AM</p>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 mt-3">
+                    <button class="btn btn-outline-secondary disabled">Pickup Not Available Yet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Tab switching functionality
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Hide all tab contents
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.add('hidden');
+                });
+                
+                // Show selected tab content
+                const targetId = this.getAttribute('href');
+                document.querySelector(targetId).classList.remove('hidden');
+                
+                // Update active nav link
+                document.querySelectorAll('.nav-link').forEach(navLink => {
+                    navLink.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+        
+        // Bid placement functionality
+        document.querySelectorAll('.delivery-card .btn-primary').forEach(button => {
+            button.addEventListener('click', function() {
+                const card = this.closest('.delivery-card');
+                const bidInput = card.querySelector('input[type="number"]');
+                const bidAmount = parseFloat(bidInput.value);
+                const minBid = parseFloat(bidInput.min);
+                
+                if (bidAmount < minBid) {
+                    alert(`Bid must be at least $${minBid.toFixed(2)}`);
+                    return;
+                }
+                
+                // In a real app, this would send the bid to the server
+                alert(`Bid placed: $${bidAmount.toFixed(2)}`);
+                
+                // Add the bid to the list (demo only)
+                const bidsContainer = card.querySelector('.bid-card').parentElement;
+                const newBid = document.createElement('div');
+                newBid.className = 'bid-card p-3 mb-2 my-bid';
+                newBid.innerHTML = `
+                    <div class="d-flex justify-content-between">
+                        <span><strong>You</strong>: $${bidAmount.toFixed(2)}</span>
+                        <small class="text-muted">just now</small>
+                    </div>
+                `;
+                bidsContainer.insertBefore(newBid, card.querySelector('.input-group'));
+                
+                // Update current lowest bid display
+                const currentBids = Array.from(card.querySelectorAll('.bid-card:not(.my-bid)')).map(bidCard => {
+                    const text = bidCard.querySelector('span').textContent;
+                    return parseFloat(text.match(/\$([\d.]+)/)[1]);
+                });
+                
+                const myBids = Array.from(card.querySelectorAll('.my-bid')).map(bidCard => {
+                    const text = bidCard.querySelector('span').textContent;
+                    return parseFloat(text.match(/\$([\d.]+)/)[1]);
+                });
+                
+                const allBids = currentBids.concat(myBids);
+                const lowestBid = Math.min(...allBids);
+                
+                // Update the "current lowest bid" display
+                const lowestBidElement = card.querySelector('p:has(.fa-dollar-sign)');
+                if (lowestBidElement) {
+                    lowestBidElement.textContent = `Current lowest bid: $${lowestBid.toFixed(2)}`;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

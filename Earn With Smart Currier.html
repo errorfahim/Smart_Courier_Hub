@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earn With Smart Courier Hub</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #f39c12;
+            --secondary-color: #e67e22;
+            --accent-color: #d35400;
+            --light-color: #fef9e7;
+            --dark-color: #7e5109;
+            --success-color: #27ae60;
+            --earn-color: #8e44ad; /* Purple for earn section */
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+        }
+        
+        .navbar {
+            background-color: var(--primary-color);
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white !important;
+        }
+        
+        .nav-link {
+            color: white !important;
+            margin: 0 10px;
+            font-weight: 500;
+        }
+        
+        .btn-earn {
+            background-color: var(--earn-color);
+            border-color: var(--earn-color);
+            color: white;
+        }
+        
+        .btn-earn:hover {
+            background-color: #9b59b6;
+            border-color: #9b59b6;
+            color: white;
+        }
+        
+        .partner-hero {
+            background: linear-gradient(rgba(142, 68, 173, 0.8), rgba(142, 68, 173, 0.8)), url('https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .partner-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            height: 100%;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .partner-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .partner-card-header {
+            background-color: var(--earn-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .partner-card-body {
+            padding: 30px;
+            background-color: white;
+        }
+        
+        .form-tabs {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .form-tabs .nav-link {
+            color: var(--dark-color) !important;
+            font-weight: 600;
+            border: none;
+            padding: 12px 20px;
+            margin-right: 5px;
+        }
+        
+        .form-tabs .nav-link.active {
+            color: var(--earn-color) !important;
+            border-bottom: 3px solid var(--earn-color);
+            background-color: transparent;
+        }
+        
+        .form-tabs .nav-link:hover {
+            border-bottom: 3px solid #ddd;
+        }
+        
+        .partner-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--earn-color);
+        }
+        
+        .benefit-item {
+            margin-bottom: 15px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .benefit-item:before {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: var(--success-color);
+        }
+        
+        .form-section {
+            display: none;
+        }
+        
+        .form-section.active {
+            display: block;
+        }
+        
+        .requirements-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .requirements-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .requirements-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 5px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--earn-color);
+        }
+        
+        .upload-icon {
+            font-size: 2rem;
+            color: var(--earn-color);
+            margin-bottom: 10px;
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 40px 0 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .partner-hero {
+                padding: 60px 0;
+            }
+            
+            .form-tabs .nav-link {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-box-open me-2"></i>Smart Courier Hub
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="become-merchant.html">For Businesses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="earn-with-us.html">Earn With Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                    <li class="nav-item ms-lg-3">
+                        <a class="btn btn-earn" href="login.html">Partner Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="partner-hero">
+        <div class="container">
+            <h1 class="display-4 fw-bold mb-4">Earn With Smart Courier Hub</h1>
+            <p class="lead mb-5">Join our network of delivery professionals and start earning on your own schedule</p>
+            <a href="#partner-forms" class="btn btn-light btn-lg px-4 me-2">Apply Now</a>
+            <a href="#how-it-works" class="btn btn-outline-light btn-lg px-4">Learn More</a>
+        </div>
+    </section>
+
+    <!-- Partner Types Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="mb-3">Choose Your Partner Type</h2>
+                    <p class="lead">Select the role that best fits your skills and availability</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="partner-card">
+                        <div class="partner-card-header">
+                            <i class="partner-icon fas fa-motorcycle"></i>
+                            <h3>Delivery Agent</h3>
+                        </div>
+                        <div class="partner-card-body">
+                            <p>Deliver packages to customers using your own motorcycle or bicycle. Work when you want and earn per delivery.</p>
+                            <ul class="list-unstyled">
+                                <li class="benefit-item">Flexible working hours</li>
+                                <li class="benefit-item">Weekly payments</li>
+                                <li class="benefit-item">Performance bonuses</li>
+                            </ul>
+                            <button class="btn btn-earn w-100 show-form" data-form="delivery-agent">Apply Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="partner-card">
+                        <div class="partner-card-header">
+                            <i class="partner-icon fas fa-truck-pickup"></i>
+                            <h3>Pickup Agent</h3>
+                        </div>
+                        <div class="partner-card-body">
+                            <p>Collect packages from businesses and bring them to our hubs. Ideal for those with vans or larger vehicles.</p>
+                            <ul class="list-unstyled">
+                                <li class="benefit-item">Scheduled routes</li>
+                                <li class="benefit-item">Higher earning potential</li>
+                                <li class="benefit-item">Regular clients</li>
+                            </ul>
+                            <button class="btn btn-earn w-100 show-form" data-form="pickup-agent">Apply Now</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="partner-card">
+                        <div class="partner-card-header">
+                            <i class="partner-icon fas fa-store"></i>
+                            <h3>Booking Point</h3>
+                        </div>
+                        <div class="partner-card-body">
+                            <p>Operate a local hub where customers can drop off and pick up packages. Earn commission on all transactions.</p>
+                            <ul class="list-unstyled">
+                                <li class="benefit-item">Steady income</li>
+                                <li class="benefit-item">Customer traffic</li>
+                                <li class="benefit-item">Business support</li>
+                            </ul>
+                            <button class="btn btn-earn w-100 show-form" data-form="booking-point">Apply Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <h2 class="mb-4">How Partnering Works</h2>
+                    <div class="d-flex mb-4">
+                        <div class="me-4">
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <span class="h4 mb-0">1</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h4>Apply Online</h4>
+                            <p>Complete the application form and submit required documents. Our team will review within 48 hours.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-4">
+                        <div class="me-4">
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <span class="h4 mb-0">2</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h4>Get Approved</h4>
+                            <p>Once approved, you'll receive training materials and access to our partner app.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="me-4">
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <span class="h4 mb-0">3</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h4>Start Earning</h4>
+                            <p>Begin accepting delivery requests and earning money right away.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1025&q=80" alt="Delivery Partner" class="img-fluid rounded">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partner Forms Section -->
+    <section id="partner-forms" class="py-5 bg-light">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-12">
+                    <ul class="nav form-tabs" id="partnerFormTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="delivery-tab" data-bs-toggle="tab" data-bs-target="#delivery-agent" type="button" role="tab">Delivery Agent</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pickup-tab" data-bs-toggle="tab" data-bs-target="#pickup-agent" type="button" role="tab">Pickup Agent</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="booking-tab" data-bs-toggle="tab" data-bs-target="#booking-point" type="button" role="tab">Booking Point</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="partnerFormContent">
+                <!-- Delivery Agent Form -->
+                <div class="tab-pane fade show active" id="delivery-agent" role="tabpanel" aria-labelledby="delivery-tab">
+                    <div class="row">
+                        <div class="col-lg-6 mb-4 mb-lg-0">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body p-4">
+                                    <h3 class="mb-4">Delivery Agent Requirements</h3>
+                                    <ul class="requirements-list">
+                                        <li><i class="fas fa-check-circle text-success me-2"></i> Valid motorcycle or bicycle</li>
+                                        <li><i class="fas fa-check-circle text-success me-2"></i> Smartphone with GPS</li>
+                                        <li><i class="fas fa-check-circle text-success me-2"></i> Valid driver's license (for motorcycle)</li>
+                                        <li><i class="fas fa-check-circle text-success me-2"></i> NID copy</li>
+                                        <li><i class="fas fa-check-circle text-success me-2"></i> Bank account for payments</li>
+                                        <li><i class="fas fa-check-circle text-success me-2"></i> Good knowledge of local areas</li>
+                                    </ul>
+                                    <div class="alert alert-info mt-4">
+                                        <h5><i class="fas fa-info-circle me-2"></i>Earning Potential</h5>
+                                        <p class="mb-0">Delivery agents typically earn ৳50-৳150 per delivery depending on distance and package size. Top agents earn ৳25,000-৳40,000 per month.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body p-4">
+                                    <h3 class="mb-4">Delivery Agent Application</h3>
+                                    <form id="deliveryAgentForm">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label for="daFirstName" class="form-label">First Name</label>
+                                                <input type="text" class="form-control" id="daFirstName" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="daLastName" class="form-label">Last Name</label>
+                                                <input type="text" class="form-control" id="daLastName" required>
+                                            </div>
+                                            <div class="col-12">
+                                                <label for="daEmail" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="daEmail" required>
+                                            </div>
+                                            <div class="col-12">
+                                                <label for="daPhone" class="form-label">Phone Number</label>
+                                                <input type="tel" class="form-control" id="daPhone" required>
+                                            </div>
+                                            <div class="col-12">
+                                                <label for="daAddress" class="form-label">Full Address</label>
+                                                <textarea class="form-control" id="daAddress" rows="2" required></textarea>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="daVehicle" class="form-label">Vehicle Type</label>
+                                                <select class="form-select" id="daVehicle" required>
+                                                    <option value="">Select Vehicle</option>
+                                                    <option value="motorcycle">Motorcycle</option>
+                                                    <option value="bicycle">Bicycle</option>
+                                                    <option value="other">Other</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="daLicense" class="form-label">License Number (if applicable)</label>
+                                                <input type="text" class="form-control" id="daLicense">
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label">Upload Documents</label>
+                                                <div class="upload-area" id="daUploadArea">
+                                                    <i class="upload-icon fas fa-cloud-upload-alt"></i>
+                                                    <p class="mb-1">Click to upload or drag & drop</p>
+                                                    <p class="small text-muted">NID, License, Vehicle Papers (PDF, JPG, PNG)</p>
+                                                    <input type="file" id="daDocuments" class="d-none" multiple>
+                                                </div>
+                                                <div id="daFileList" class="small"></div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="daAgreement" required>
+                                                    <label class="form-check-label" for="daAgreement">
+                                                        I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <button type="submit" class="btn btn-earn w-100">Submit Application</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pickup Agent Form -->
+                <div class="tab-pane fade" id="pickup-agent" role="tabpanel" aria-labelledby="pickup-tab">
+                    <div class="row">
+                        <div class="col-lg-6 mb-4 mb-lg-0">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body p-4">
+                                    <h3 class="mb-4">Pickup Agent Requirements</h3>
+                                    <ul class="requirements-list">
+                                        <li><i class="fas fa-check-circle text-success me-2"></i> Own vehicle (motorcycle, van, or truck)</li>
+                                        <li><i class="fas fa-check-circle text-success me-2"></i> Valid driver's license</li>
+                                        <li><i class="fas fa-check-circle text-success me-2"></i> Smartphone with GPS</li>
+                                        <li><i class="fas fa-check-circle text-success me-2"></i> NID copy</li>
+                                        <li><i class="fas fa-check-circle text-success me-2"></i> Bank account for payments</li>
+                                        <li><i class="fas fa-check-circle text-success me-2"></i> Available during business hours</li>
+                                    </ul>
+                                    <div class="alert alert-info mt-4">
+                                        <h5><i class="fas fa-info-circle me-2"></i>Earning Potential</h5>
+                                        <p class="mb-0">Pickup agents earn ৳80-৳200 per pickup depending on volume and distance. Full-time agents earn ৳30,000-৳50,000 per month.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body p-4">
+                                    <h3 class="mb-4">Pickup Agent Application</h3>
+                                    <form id="pickupAgentForm">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label for="paFirstName" class="form-label">First Name</label>
+                                                <input type="text" class="form-control" id="paFirstName" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="paLastName" class="form-label">Last Name</label>
+                                                <input type="text" class="form-control" id="paLastName" required>
+                                            </div>
+                                            <div class="col-12">
+                                                <label for="paEmail" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="paEmail" required>
+                                            </div>
+                                            <div class="col-12">
+                                                <label for="paPhone" class="form-label">Phone Number</label>
+                                                <input type="tel" class="form-control" id="paPhone" required>
+                                            </div>
+                                            <div class="col-12">
+                                                <label for="paAddress" class="form-label">Full Address</label>
+                                                <textarea class="form-control" id="paAddress" rows="2" required></textarea>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="paVehicle" class="form-label">Vehicle Type</label>
+                                                <select class="form-select" id="paVehicle" required>
+                                                    <option value="">Select Vehicle</option>
+                                                    <option value="motorcycle">Motorcycle</option>
+                                                    <option value="van">Van</option>
+                                                    <option value="truck">Truck</option>
+                                                    <option value="other">Other</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="paCapacity" class="form-label">Vehicle Capacity (kg)</label>
+                                                <input type="number" class="form-control" id="paCapacity" required>
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label">Upload Documents</label>
+                                                <div class="upload-area" id="paUploadArea">
+                                                    <i class="upload-icon fas fa-cloud-upload-alt"></i>
+                                                    <p class="mb-1">Click to upload or drag & drop</p>
+                                                    <p class="small text-muted">NID, License, Vehicle Papers (PDF, JPG, PNG)</p>
+                                                    <input type="file" id="paDocuments" class="d-none" multiple>
+                                                </div>
+                                                <div id="paFileList" class="small"></div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="paAgreement" required>
+                                                    <label class="form-check-label" for="paAgreement">
+                                                        I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <button type="submit" class="btn btn-earn w-100">Submit Application</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Booking Point Form -->
+                <div class="tab-pane fade" id="booking-point" role="tabpanel" aria-labelledby="booking-tab">
+                    <div class="row">
+                        <div class="col-lg-6 mb-4 mb-lg-0">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body p-4">
+                                    <h3 class="mb-4">Booking Point Requirements</h3>
+                                    <ul class="requirements-list">
+                                        <li><i class="fas fa-check-circle text-success me-2"></i> Physical location (shop or office)</li>
+                                        <li><i class="fas fa-check-circle text-success me-2"></i> Open at least 8 hours/day</li>
+                                        <li><i class="fas fa-check-circle text-success me-2"></i> Storage space for packages</li>
+                                        <li><i class="fas fa-check-circle text-success me-2"></i> Business registration documents</li>
+                                        <li><i class="fas fa-check-circle text-success me-2"></i> NID of owner/manager</li>
+                                        <li><i class="fas fa-check-circle text-success me-2"></i> Bank account for payments</li>
+                                    </ul>
+                                    <div class="alert alert-info mt-4">
+                                        <h5><i class="fas fa-info-circle me-2"></i>Earning Potential</h5>
+                                        <p class="mb-0">Booking points earn 10-15% commission on all transactions. Average monthly earnings are ৳15,000-৳30,000 plus increased customer traffic.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body p-4">
+                                    <h3 class="mb-4">Booking Point Application</h3>
+                                    <form id="bookingPointForm">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label for="bpBusinessName" class="form-label">Business Name</label>
+                                                <input type="text" class="form-control" id="bpBusinessName" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="bpType" class="form-label">Business Type</label>
+                                                <select class="form-select" id="bpType" required>
+                                                    <option value="">Select Type</option>
+                                                    <option value="shop">Retail Shop</option>
+                                                    <option value="office">Office</option>
+                                                    <option value="other">Other</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-12">
+                                                <label for="bpOwnerName" class="form-label">Owner/Manager Name</label>
+                                                <input type="text" class="form-control" id="bpOwnerName" required>
+                                            </div>
+                                            <div class="col-12">
+                                                <label for="bpEmail" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="bpEmail" required>
+                                            </div>
+                                            <div class="col-12">
+                                                <label for="bpPhone" class="form-label">Phone Number</label>
+                                                <input type="tel" class="form-control" id="bpPhone" required>
+                                            </div>
+                                            <div class="col-12">
+                                                <label for="bpAddress" class="form-label">Business Address</label>
+                                                <textarea class="form-control" id="bpAddress" rows="2" required></textarea>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="bpOpenHours" class="form-label">Daily Open Hours</label>
+                                                <input type="text" class="form-control" id="bpOpenHours" placeholder="9:00 AM - 6:00 PM" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="bpSpace" class="form-label">Storage Space (sq ft)</label>
+                                                <input type="number" class="form-control" id="bpSpace" required>
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label">Upload Documents</label>
+                                                <div class="upload-area" id="bpUploadArea">
+                                                    <i class="upload-icon fas fa-cloud-upload-alt"></i>
+                                                    <p class="mb-1">Click to upload or drag & drop</p>
+                                                    <p class="small text-muted">Trade License, NID, Location Photos (PDF, JPG, PNG)</p>
+                                                    <input type="file" id="bpDocuments" class="d-none" multiple>
+                                                </div>
+                                                <div id="bpFileList" class="small"></div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="bpAgreement" required>
+                                                    <label class="form-check-label" for="bpAgreement">
+                                                        I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <button type="submit" class="btn btn-earn w-100">Submit Application</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="mb-3">Frequently Asked Questions</h2>
+                    <p class="lead">Find answers to common questions about becoming a partner</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item mb-3 border-0 shadow-sm">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                    How long does the approval process take?
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Most applications are reviewed within 48 hours. If approved, you'll receive access to our partner app and can start working immediately after completing a short orientation.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item mb-3 border-0 shadow-sm">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                                    When and how do I get paid?
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Payments are processed every week on Tuesday. You'll receive your earnings via direct bank transfer or mobile financial services like bKash or Nagad, depending on your preference.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item mb-3 border-0 shadow-sm">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                                    Is there any cost to join?
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    There's no upfront cost to join as a delivery or pickup agent. For booking points, there may be a small setup fee depending on your location and the equipment we need to provide.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item mb-3 border-0 shadow-sm">
+                            <h2 class="accordion-header" id="headingFour">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+                                    Can I work for other delivery services too?
+                                </button>
+                            </h2>
+                            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Yes, you're free to work with other services. However, we do require that you prioritize Smart Courier Hub deliveries during the hours you've committed to being available on our platform.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item border-0 shadow-sm">
+                            <h2 class="accordion-header" id="headingFive">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive">
+                                    What support is available for partners?
+                                </button>
+                            </h2>
+                            <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    We offer 24/7 support via phone, chat, and email. You'll also have access to training materials, a dedicated account manager, and regular workshops to help you maximize your earnings.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-5 bg-dark text-white">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8 mb-4 mb-lg-0">
+                    <h2 class="mb-3">Ready to Start Earning?</h2>
+                    <p class="mb-0">Join hundreds of partners who are already growing their income with Smart Courier Hub.</p>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <a href="#partner-forms" class="btn btn-earn btn-lg me-2">Apply Now</a>
+                    <a href="contact.html" class="btn btn-outline-light btn-lg">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container py-5">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h5 class="text-white mb-4"><i class="fas fa-box-open me-2"></i>Smart Courier Hub</h5>
+                    <p>Transforming Bangladesh's logistics sector through technology, transparency, and competition

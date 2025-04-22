@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Courier Hub - Bid-Based Delivery Marketplace</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #f39c12; /* Changed to yellowish */
+            --secondary-color: #e67e22; /* Darker yellow/orange */
+            --accent-color: #d35400; /* Deep orange */
+            --light-color: #fef9e7; /* Very light yellow */
+            --dark-color: #7e5109; /* Dark brown/yellow */
+            --success-color: #27ae60;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+        }
+        
+        .navbar {
+            background-color: var(--primary-color);
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white !important;
+        }
+        
+        .nav-link {
+            color: white !important;
+            margin: 0 10px;
+            font-weight: 500;
+        }
+        
+        .nav-link:hover {
+            color: var(--dark-color) !important;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: #d35400;
+            border-color: #d35400;
+        }
+        
+        .btn-accent {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+        
+        .btn-accent:hover {
+            background-color: #a04000;
+            border-color: #a04000;
+            color: white;
+        }
+
+        /* New buttons */
+        .btn-merchant {
+            background-color: #16a085;
+            border-color: #16a085;
+            color: white;
+        }
+        
+        .btn-merchant:hover {
+            background-color: #1abc9c;
+            border-color: #1abc9c;
+            color: white;
+        }
+        
+        .btn-earn {
+            background-color: #8e44ad;
+            border-color: #8e44ad;
+            color: white;
+        }
+        
+        .btn-earn:hover {
+            background-color: #9b59b6;
+            border-color: #9b59b6;
+            color: white;
+        }
+        
+        .hero-section {
+            background: linear-gradient(rgba(243, 156, 18, 0.8), rgba(243, 156, 18, 0.8)), url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+        
+        .feature-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            height: 100%;
+            padding: 20px;
+            background-color: white;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+        
+        .how-it-works-step {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background-color: var(--secondary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .testimonial-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .testimonial-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+        
+        .pricing-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            padding: 30px;
+            margin-bottom: 30px;
+            background-color: white;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .pricing-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+            margin: -30px -30px 20px -30px;
+        }
+        
+        .pricing-price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+        
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 50px 0 20px;
+        }
+        
+        .footer-links h5 {
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: var(--light-color);
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            color: var(--dark-color);
+        }
+        
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+        
+        .social-icons a:hover {
+            color: var(--dark-color);
+        }
+        
+        .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 30px;
+        }
+        
+        /* Dark mode toggle */
+        .dark-mode {
+            background-color: #1a1a1a;
+            color: #f8f9fa;
+        }
+        
+        .dark-mode .card {
+            background-color: #2c2c2c;
+            color: #f8f9fa;
+        }
+        
+        .dark-mode .testimonial-card {
+            background-color: #2c2c2c;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 60px 0;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+        }
+        
+        /* Dashboard styles */
+        .dashboard-sidebar {
+            background-color: var(--primary-color);
+            color: white;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+        }
+        
+        .dashboard-sidebar .nav-link {
+            color: white !important;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+        
+        .dashboard-sidebar .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .dashboard-sidebar .nav-link.active {
+            background-color: var(--secondary-color);
+        }
+        
+        .dashboard-content {
+            padding: 30px;
+        }
+        
+        .stats-card {
+            border-radius: 10px;
+            padding: 20px;
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        .stats-card.primary {
+            background-color: var(--secondary-color);
+        }
+        
+        .stats-card.success {
+            background-color: var(--success-color);
+        }
+        
+        .stats-card.warning {
+            background-color: #f39c12;
+        }
+        
+        .stats-card.danger {
+            background-color: var(--accent-color);
+        }
+        
+        .stats-number {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .stats-title {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .delivery-card {
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+            background-color: white;
+        }
+        
+        .delivery-card:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
+        }
+        
+        .delivery-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .status-pending {
+            background-color: #f39c12;
+            color: white;
+        }
+        
+        .status-in-progress {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .status-completed {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .status-cancelled {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .map-container {
+            height: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #eee;
+        }
+        
+        /* Form styles */
+        .form-card {
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            background-color: white;
+        }
+        
+        /* Toggle switch for dark mode */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--secondary-color);
+        }
+        
+        input:focus + .slider {
+            box-shadow: 0 0 1px var(--secondary-color);
+        }
+        
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* New action buttons section */
+        .action-buttons-section {
+            padding: 40px 0;
+            background-color: rgba(243, 156, 18, 0.1);
+        }
+
+        .action-card {
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            height: 100%;
+            transition: all 0.3s;
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .action-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-box-open me-2"></i>Smart Courier Hub
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Features
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="Tracking Page.html">Tracking Delivery</a></li>
+                            <li><a class="dropdown-item" href="Merchant Bid Creation System.html">Create Bidding</a></li>
+                            <li><a class="dropdown-item" href="Bidding System.html">Bidding & Earn</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#how-it-works">How It Works</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#pricing">Pricing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#testimonials">Testimonials</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-language me-1"></i> English
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">English</a></li>
+                            <li><a class="dropdown-item" href="#">বাংলা</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item ms-lg-3">
+                        <a class="btn btn-accent" href="login.html">Login</a>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-primary" href="register.html">Register</a>
+                    </li>
+                    <li class="nav-item ms-lg-2 d-flex align-items-center">
+                        <label class="switch">
+                            <input type="checkbox" id="darkModeToggle">
+                            <span class="slider"></span>
+                        </label>
+                        <span class="ms-2"><i class="fas fa-moon"></i></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <h1 class="hero-title mb-4">Revolutionizing Delivery Services in Bangladesh</h1>
+                    <p class="hero-subtitle mb-5">A transparent, bid-based marketplace connecting businesses with verified couriers for affordable and reliable deliveries.</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="register.html" class="btn btn-primary btn-lg px-4">Get Started</a>
+                        <a href="#how-it-works" class="btn btn-outline-light btn-lg px-4">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Action Buttons Section -->
+    <section class="action-buttons-section">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-store"></i>
+                        </div>
+                        <h3>Become a Merchant</h3>
+                        <p class="mb-4">Join as a business and get competitive bids from verified couriers for your delivery needs.</p>
+                        <a href="Become Merchant.html" class="btn btn-merchant btn-lg">Register as Merchant</a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-motorcycle"></i>
+                        </div>
+                        <h3>Earn With Smart Courier Hub</h3>
+                        <p class="mb-4">Become a delivery partner and earn money by completing deliveries in your area.</p>
+                        <a href="Earn With Smart Currier.html" class="btn btn-earn btn-lg">Become a Courier</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5 bg-light">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="section-title">Key Features</h2>
+                    <p class="section-subtitle">Smart Courier Hub offers a comprehensive solution for all your delivery needs</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-gavel"></i>
+                        </div>
+                        <h4>Real-time Bidding</h4>
+                        <p>Couriers compete to offer you the best prices and fastest delivery times for your packages.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-map-marked-alt"></i>
+                        </div>
+                        <h4>Live Tracking</h4>
+                        <p>Track your delivery in real-time with GPS technology and receive notifications at every step.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h4>Verified Couriers</h4>
+                        <p>All delivery partners are thoroughly verified with NID and background checks for your safety.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="feature-card text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <h4>Flexible Payments</h4>
+                        <p>Pay digitally or with cash on delivery. Multiple payment options including bKash, Nagad, and cards.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-5">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="section-title">How It Works</h2>
+                    <p class="section-subtitle">Get your items delivered in just a few simple steps</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="how-it-works-step">
+                        <div class="step-number">1</div>
+                        <h4>Create Delivery Request</h4>
+                        <p>Enter pickup and drop-off locations, package details, and your preferred delivery time.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="how-it-works-step">
+                        <div class="step-number">2</div>
+                        <h4>Receive Bids</h4>
+                        <p>Verified couriers in your area will place bids with their prices and estimated delivery times.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="how-it-works-step">
+                        <div class="step-number">3</div>
+                        <h4>Select & Track</h4>
+                        <p>Choose the best offer based on price and ratings. Track your delivery in real-time.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <h2 class="mb-4">Experience the Future of Deliveries</h2>
+                    <p class="mb-4">Our platform is designed to be intuitive and user-friendly for both businesses and couriers. With features like AI-based partner matching and optional delivery insurance, we're bringing transparency and efficiency to Bangladesh's logistics sector.</p>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Reduce delivery costs by up to 30%</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Increase courier accountability with ratings</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Enjoy peace of mind with secure payments</li>
+                    </ul>
+                    <a href="register.html" class="btn btn-primary mt-3">Join Now</a>
+                </div>
+                <div class="col-lg-6">
+                    <div class="ratio ratio-16x9">
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Platform Demo" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-5">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="section-title">Simple & Transparent Pricing</h2>
+                    <p class="section-subtitle">We only succeed when you succeed. Our fees are competitive and straightforward.</p>
+                </div>
+            </div>
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-6 col-lg-4">
+                    <div class="pricing-card text-center">
+                        <div class="pricing-header">
+                            <h4>For Businesses</h4>
+                        </div>
+                        <div class="pricing-price my-4">5%</div>
+                        <p>of delivery cost</p>
+                        <ul class="list-unstyled my-4">
+                            <li class="mb-3"><i class="fas fa-check me-2 text-success"></i> No hidden fees</li>
+                            <li class="mb-3"><i class="fas fa-check me-2 text-success"></i> Pay only when delivery is completed</li>
+                            <li class="mb-3"><i class="fas fa-check me-2 text-success"></i> Bulk discounts available</li>
+                        </ul>
+                        <a href="register.html" class="btn btn-outline-primary">Get Started</a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="pricing-card text-center">
+                        <div class="pricing-header">
+                            <h4>For Couriers</h4>
+                        </div>
+                        <div class="pricing-price my-4">10%</div>
+                        <p>of earnings per delivery</p>
+                        <ul class="list-unstyled my-4">
+                            <li class="mb-3"><i class="fas fa-check me-2 text-success"></i> Keep 90% of what you earn</li>
+                            <li class="mb-3"><i class="fas fa-check me-2 text-success"></i> Weekly or instant payouts</li>
+                            <li class="mb-3"><i class="fas fa-check me-2 text-success"></i> No monthly fees</li>
+                        </ul>
+                        <a href="register.html" class="btn btn-primary">Start Earning</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-5 bg-light">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="section-title">What Our Users Say</h2>
+                    <p class="section-subtitle">Hear from businesses and couriers who are already benefiting from our platform</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="testimonial-card text-center">
+                        <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Testimonial" class="testimonial-img">
+                        <h5>Fatima Begum</h5>
+                        <p class="text-muted">Small Business Owner</p>
+                        <div class="rating mb-3">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                        </div>
+                        <p>"Smart Courier Hub has reduced my delivery costs by 25% while improving reliability. The bidding system ensures I always get the best price."</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="testimonial-card text-center">
+                        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Testimonial" class="testimonial-img">
+                        <h5>Rahim Khan</h5>
+                        <p class="text-muted">Freelance Courier</p>
+                        <div class="rating mb-3">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star-half-alt text-warning"></i>
+                        </div>
+                        <p>"I earn 30% more now by choosing the best delivery jobs. The app is easy to use and payments come on time every week."</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="testimonial-card text-center">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Testimonial" class="testimonial-img">
+                        <h5>Nusrat Jahan</h5>
+                        <p class="text-muted">E-commerce Store</p>
+                        <div class="rating mb-3">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                        </div>
+                        <p>"The real-time tracking gives me and my customers peace of mind. Delivery complaints have dropped by 80% since we started using this platform."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-5 bg-primary text-white">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8 mb-4 mb-lg-0">
+                    <h2 class="mb-3">Ready to Transform Your Delivery Experience?</h2>
+                    <p class="mb-0">Join hundreds of businesses and couriers who are already benefiting from our transparent, efficient platform.</p>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <a href="register.html" class="btn btn-light btn-lg me-2">Register Now</a>
+                    <a href="contact.html" class="btn btn-outline-light btn-lg">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h5 class="mb-4"><i class="fas fa-box-open me-2"></i>Smart Courier Hub</h5>
+                    <p>Transforming Bangladesh's logistics sector through technology, transparency, and competition.</p>
+                    <div class="social-icons mt-4">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <div class="footer-links">
+                        <h5>Quick Links</h5>
+                        <ul>
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#features">Features</a></li>
+                            <li><a href="#how-it-works">How It Works</a></li>
+                            <li><a href="#pricing">Pricing</a></li>
+                            <li><a href="#testimonials">Testimonials</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <div class="footer-links">
+                        <h5>Company</h5>
+                        <ul>
+                            <li><a href="about.html">About Us</a></li>
+                            <li><a href="careers.html">Careers</a></li>
+                            <li><a href="blog.html">Blog</a></li>
+                            <li><a href="press.html">Press</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="footer-links">
+                        <h5>Contact Info</h5>
+                        <ul class="contact-info">
+                            <li><i class="fas fa-map-marker-alt me-2"></i> 123 Business Avenue, Dhaka 1212, Bangladesh</li>
+                            <li><i class="fas fa-phone-alt me-2"></i> +880 1712 345678</li>
+                            <li><i class="fas fa-envelope me-2"></i> info@smartcourierhub.com</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="copyright text-center">
+                        <p class="mb-0">&copy; 2025 Smart Courier Hub. All rights reserved. | <a href="privacy.html">Privacy Policy</a> | <a href="terms.html">Terms of Service</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        // Dark mode toggle functionality
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        
+        darkModeToggle.addEventListener('change', function() {
+            if(this.checked) {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
+        });
+        
+        // Check for saved dark mode preference
+        if(localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.checked = true;
+        }
+        
+        // Save dark mode preference
+        darkModeToggle.addEventListener('change', function() {
+            if(this.checked) {
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+    </script>
+</body>
+</html>

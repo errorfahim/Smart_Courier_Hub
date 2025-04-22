@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Bid - Smart Courier Hub</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #f39c12;
+            --secondary-color: #e67e22;
+            --accent-color: #d35400;
+            --light-color: #fef9e7;
+            --dark-color: #7e5109;
+            --success-color: #27ae60;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+        }
+        
+        .navbar {
+            background-color: var(--primary-color);
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white !important;
+        }
+        
+        .bid-form-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 30px;
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .bid-card {
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: white;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .bid-card.completed {
+            border-left-color: var(--success-color);
+        }
+        
+        .bid-card.active {
+            border-left-color: var(--secondary-color);
+        }
+        
+        .bid-card.cancelled {
+            border-left-color: #e74c3c;
+        }
+        
+        .bid-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .status-active {
+            background-color: var(--secondary-color);
+        }
+        
+        .status-completed {
+            background-color: var(--success-color);
+        }
+        
+        .status-pending {
+            background-color: #f39c12;
+        }
+        
+        .status-cancelled {
+            background-color: #e74c3c;
+        }
+        
+        .dashboard-card {
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .stats-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-box-open me-2"></i>Smart Courier Hub
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Create Bid</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="dashboardLink">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="historyLink">History</a>
+                    </li>
+                    <li class="nav-item ms-lg-3">
+                        <a class="btn btn-primary" href="#">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Create Bid Form (Default View) -->
+    <div class="container my-5" id="createBidSection">
+        <div class="bid-form-container">
+            <h2 class="mb-4">Create New Delivery Bid</h2>
+            <form id="bidForm">
+                <!-- Pickup Information -->
+                <div class="form-section">
+                    <h4 class="section-title">Pickup Information</h4>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="pickupName" class="form-label">Contact Name*</label>
+                            <input type="text" class="form-control" id="pickupName" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="pickupPhone" class="form-label">Contact Number*</label>
+                            <input type="tel" class="form-control" id="pickupPhone" required>
+                        </div>
+                        <div class="col-12">
+                            <label for="pickupAddress" class="form-label">Full Address*</label>
+                            <textarea class="form-control" id="pickupAddress" rows="2" required></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="pickupDate" class="form-label">Preferred Pickup Date*</label>
+                            <input type="date" class="form-control" id="pickupDate" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="pickupTime" class="form-label">Preferred Pickup Time*</label>
+                            <input type="time" class="form-control" id="pickupTime" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Delivery Information -->
+                <div class="form-section">
+                    <h4 class="section-title">Delivery Information</h4>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="deliveryName" class="form-label">Recipient Name*</label>
+                            <input type="text" class="form-control" id="deliveryName" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="deliveryPhone" class="form-label">Recipient Phone*</label>
+                            <input type="tel" class="form-control" id="deliveryPhone" required>
+                        </div>
+                        <div class="col-12">
+                            <label for="deliveryAddress" class="form-label">Delivery Address*</label>
+                            <textarea class="form-control" id="deliveryAddress" rows="2" required></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="deliveryCity" class="form-label">City*</label>
+                            <select class="form-select" id="deliveryCity" required>
+                                <option value="" selected disabled>Select city</option>
+                                <option value="dhaka">Dhaka</option>
+                                <option value="chittagong">Chittagong</option>
+                                <option value="sylhet">Sylhet</option>
+                                <option value="khulna">Khulna</option>
+                                <option value="rajshahi">Rajshahi</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="deliveryType" class="form-label">Delivery Type*</label>
+                            <select class="form-select" id="deliveryType" required>
+                                <option value="" selected disabled>Select type</option>
+                                <option value="standard">Standard (24-48 hours)</option>
+                                <option value="express">Express (Same day)</option>
+                                <option value="nextday">Next Day</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Package Details -->
+                <div class="form-section">
+                    <h4 class="section-title">Package Details</h4>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="packageType" class="form-label">Package Type*</label>
+                            <select class="form-select" id="packageType" required>
+                                <option value="" selected disabled>Select type</option>
+                                <option value="document">Documents</option>
+                                <option value="parcel">Parcel</option>
+                                <option value="food">Food</option>
+                                <option value="electronics">Electronics</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="packageWeight" class="form-label">Weight (kg)*</label>
+                            <input type="number" class="form-control" id="packageWeight" step="0.1" min="0.1" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="packageValue" class="form-label">Declared Value (৳)</label>
+                            <input type="number" class="form-control" id="packageValue" min="0">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="packageDescription" class="form-label">Description</label>
+                            <input type="text" class="form-control" id="packageDescription" placeholder="Brief description of contents">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Payment & Options -->
+                <div class="form-section">
+                    <h4 class="section-title">Payment & Options</h4>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="paymentMethod" class="form-label">Payment Method*</label>
+                            <select class="form-select" id="paymentMethod" required>
+                                <option value="" selected disabled>Select method</option>
+                                <option value="cod">Cash on Delivery</option>
+                                <option value="prepaid">Prepaid</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="codAmount" class="form-label">COD Amount (৳)</label>
+                            <input type="number" class="form-control" id="codAmount" min="0" disabled>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="insurance">
+                                <label class="form-check-label" for="insurance">
+                                    Add Delivery Insurance (1% of declared value)
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="fragile">
+                                <label class="form-check-label" for="fragile">
+                                    Fragile Items (Extra handling required)
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="termsAgreement" required>
+                                <label class="form-check-label" for="termsAgreement">
+                                    I agree to the <a href="#">Terms and Conditions</a>*
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                    <button type="reset" class="btn btn-outline-secondary me-md-2">Reset Form</button>
+                    <button type="submit" class="btn btn-primary">Create Bid</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard View (Hidden by Default) -->
+    <div class="container my-5 hidden" id="dashboardSection">
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="dashboard-card text-center">
+                    <div class="stats-number" id="activeBidsCount">0</div>
+                    <div class="stats-label">Active Bids</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="dashboard-card text-center">
+                    <div class="stats-number" id="completedBidsCount">0</div>
+                    <div class="stats-label">Completed</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="dashboard-card text-center">
+                    <div class="stats-number" id="totalBidsCount">0</div>
+                    <div class="stats-label">Total Bids</div>
+                </div>
+            </div>
+        </div>
+        
+        <h3 class="mb-3">Active Bids</h3>
+        <div id="activeBidsList">
+            <!-- Active bids will be inserted here by JavaScript -->
+        </div>
+        
+        <div class="d-flex justify-content-end mt-3">
+            <button class="btn btn-outline-primary" id="viewAllBidsBtn">View All Bids</button>
+        </div>
+    </div>
+
+    <!-- History View (Hidden by Default) -->
+    <div class="container my-5 hidden" id="historySection">
+        <h2 class="mb-4">Bid History</h2>
+        
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <select class="form-select" id="historyFilter">
+                    <option value="all">All Bids</option>
+                    <option value="active">Active</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <input type="date" class="form-control" id="historyDateFilter">
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary w-100" id="applyFilterBtn">Apply Filter</button>
+            </div>
+        </div>
+        
+        <div id="bidHistoryList">
+            <!-- Bid history will be inserted here by JavaScript -->
+        </div>
+        
+        <div class="d-flex justify-content-end mt-3">
+            <button class="btn btn-primary" id="createNewBidBtn">
+                <i class="fas fa-plus me-2"></i>Create New Bid
+            </button>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        // Store bids in localStorage
+        let bids = JSON.parse(localStorage.getItem('bids')) || [];
+        
+        // DOM elements
+        const createBidSection = document.getElementById('createBidSection');
+        const dashboardSection = document.getElementById('dashboardSection');
+        const historySection = document.getElementById('historySection');
+        const dashboardLink = document.getElementById('dashboardLink');
+        const historyLink = document.getElementById('historyLink');
+        const viewAllBidsBtn = document.getElementById('viewAllBidsBtn');
+        const createNewBidBtn = document.getElementById('createNewBidBtn');
+        const bidForm = document.getElementById('bidForm');
+        const paymentMethod = document.getElementById('paymentMethod');
+        const codAmount = document.getElementById('codAmount');
+        
+        // Enable/disable COD amount based on payment method
+        paymentMethod.addEventListener('change', function() {
+            codAmount.disabled = this.value !== 'cod';
+        });
+        
+        // Navigation
+        dashboardLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            showDashboard();
+        });
+        
+        historyLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            showHistory();
+        });
+        
+        viewAllBidsBtn.addEventListener('click', function() {
+            showHistory();
+        });
+        
+        createNewBidBtn.addEventListener('click', function() {
+            showCreateBid();
+        });
+        
+        // Form submission
+        bidForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Create bid object
+            const bid = {
+                id: 'BID-' + Math.floor(1000 + Math.random() * 9000),
+                pickup: {
+                    name: document.getElementById('pickupName').value,
+                    phone: document.getElementById('pickupPhone').value,
+                    address: document.getElementById('pickupAddress').value,
+                    date: document.getElementById('pickupDate').value,
+                    time: document.getElementById('pickupTime').value
+                },
+                delivery: {
+                    name: document.getElementById('deliveryName').value,
+                    phone: document.getElementById('deliveryPhone').value,
+                    address: document.getElementById('deliveryAddress').value,
+                    city: document.getElementById('deliveryCity').value,
+                    type: document.getElementById('deliveryType').value
+                },
+                package: {
+                    type: document.getElementById('packageType').value,
+                    weight: document.getElementById('packageWeight').value,
+                    value: document.getElementById('packageValue').value || 0,
+                    description: document.getElementById('packageDescription').value || '',
+                    fragile: document.getElementById('fragile').checked,
+                    insurance: document.getElementById('insurance').checked
+                },
+                payment: {
+                    method: document.getElementById('paymentMethod').value,
+                    codAmount: document.getElementById('codAmount').value || 0
+                },
+                status: 'active',
+                createdAt: new Date().toISOString(),
+                bidsReceived: []
+            };
+            
+            // Add to bids array
+            bids.push(bid);
+            
+            // Save to localStorage
+            localStorage.setItem('bids', JSON.stringify(bids));
+            
+            // Reset form
+            bidForm.reset();
+            
+            // Show success message
+            alert(`Bid created successfully! Your Bid ID is: ${bid.id}`);
+            
+            // Show dashboard
+            showDashboard();
+        });
+        
+        // Show create bid form
+        function showCreateBid() {
+            createBidSection.classList.remove('hidden');
+            dashboardSection.classList.add('hidden');
+            historySection.classList.add('hidden');
+        }
+        
+        // Show dashboard
+        function showDashboard() {
+            createBidSection.classList.add('hidden');
+            dashboardSection.classList.remove('hidden');
+            historySection.classList.add('hidden');
+            
+            updateDashboard();
+        }
+        
+        // Show history
+        function showHistory() {
+            createBidSection.classList.add('hidden');
+            dashboardSection.classList.add('hidden');
+            historySection.classList.remove('hidden');
+            
+            updateHistory();
+        }
+        
+        // Update dashboard with current bids
+        function updateDashboard() {
+            const activeBids = bids.filter(bid => bid.status === 'active');
+            const completedBids = bids.filter(bid => bid.status === 'completed');
+            
+            // Update stats
+            document.getElementById('activeBidsCount').textContent = activeBids.length;
+            document.getElementById('completedBidsCount').textContent = completedBids.length;
+            document.getElementById('totalBidsCount').textContent = bids.length;
+            
+            // Update active bids list
+            const activeBidsList = document.getElementById('activeBidsList');
+            activeBidsList.innerHTML = '';
+            
+            if (activeBids.length === 0) {
+                activeBidsList.innerHTML = '<div class="alert alert-info">No active bids found</div>';
+            } else {
+                activeBids.slice(0, 3).forEach(bid => {
+                    activeBidsList.appendChild(createBidCard(bid));
+                });
+            }
+        }
+        
+        // Update history with all bids
+        function updateHistory() {
+            const bidHistoryList = document.getElementById('bidHistoryList');
+            bidHistoryList.innerHTML = '';
+            
+            if (bids.length === 0) {
+                bidHistoryList.innerHTML = '<div class="alert alert-info">No bids found</div>';
+            } else {
+                bids.forEach(bid => {
+                    bidHistoryList.appendChild(createBidCard(bid));
+                });
+            }
+        }
+        
+        // Create a bid card element
+        function createBidCard(bid) {
+            const card = document.createElement('div');
+            card.className = `bid-card ${bid.status}`;
+            
+            let statusClass, statusText;
+            switch(bid.status) {
+                case 'active':
+                    statusClass = 'status-active';
+                    statusText = 'Active';
+                    break;
+                case 'completed':
+                    statusClass = 'status-completed';
+                    statusText = 'Completed';
+                    break;
+                case 'cancelled':
+                    statusClass = 'status-cancelled';
+                    statusText = 'Cancelled';
+                    break;
+                default:
+                    statusClass = 'status-pending';
+                    statusText = 'Pending';
+            }
+            
+            const date = new Date(bid.createdAt);
+            const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+            
+            card.innerHTML = `
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5>BID ID: ${bid.id}</h5>
+                    <span class="bid-status ${statusClass}">${statusText}</span>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>From:</strong> ${bid.pickup.address}</p>
+                        <p><strong>To:</strong> ${bid.delivery.address}, ${bid.delivery.city}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Package:</strong> ${bid.package.type} (${bid.package.weight}kg)</p>
+                        <p><strong>Created:</strong> ${formattedDate}</p>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end mt-2">
+                    <button class="btn btn-sm btn-outline-primary me-2 view-details-btn" data-bid-id="${bid.id}">
+                        <i class="fas fa-eye me-1"></i>Details
+                    </button>
+                    ${bid.status === 'active' ? `
+                    <button class="btn btn-sm btn-outline-danger cancel-bid-btn" data-bid-id="${bid.id}">
+                        <i class="fas fa-times me-1"></i>Cancel
+                    </button>
+                    ` : ''}
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        // Initialize the app
+        function init() {
+            showCreateBid();
+        }
+        
+        // Start the app
+        init();
+    </script>
+</body>
+</html>

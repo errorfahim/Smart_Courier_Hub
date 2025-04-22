@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courier Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places,directions"></script>
+    <style>
+        :root {
+            --primary-color: #f39c12;
+            --secondary-color: #e67e22;
+            --accent-color: #d35400;
+            --light-color: #fef9e7;
+            --dark-color: #7e5109;
+            --success-color: #27ae60;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+        }
+        .navbar {
+            background-color: var(--primary-color);
+            padding: 15px 0;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white !important;
+        }
+        .nav-link {
+            color: white !important;
+            margin: 0 10px;
+            font-weight: 500;
+        }
+        .nav-link:hover {
+            color: var(--dark-color) !important;
+        }
+        .btn-primary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        .btn-primary:hover {
+            background-color: #d35400;
+            border-color: #d35400;
+        }
+        .delivery-card {
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+            background-color: white;
+        }
+        .delivery-card:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
+        }
+        .delivery-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+        }
+        .status-pending {
+            background-color: #f39c12;
+        }
+        .status-in-progress {
+            background-color: #3498db;
+        }
+        .status-completed {
+            background-color: #27ae60;
+        }
+        .status-cancelled {
+            background-color: #e74c3c;
+        }
+        .form-card {
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            background-color: white;
+        }
+        .map-container {
+            height: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #eee;
+        }
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            margin-top: 20px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #eee;
+        }
+        .timeline-item {
+            position: relative;
+            padding-bottom: 30px;
+        }
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+        .timeline-dot {
+            position: absolute;
+            left: -30px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            border: 3px solid white;
+        }
+        .timeline-item.completed .timeline-dot {
+            background-color: var(--success-color);
+        }
+        .timeline-item.in-progress .timeline-dot {
+            background-color: var(--secondary-color);
+        }
+        .timeline-item.pending .timeline-dot {
+            background-color: #f39c12;
+        }
+        .not-found {
+            text-align: center;
+            padding: 50px 0;
+        }
+        .not-found-icon {
+            font-size: 5rem;
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+        .status-btn {
+            margin: 5px;
+            white-space: nowrap;
+        }
+        .active-status {
+            background-color: var(--success-color) !important;
+            border-color: var(--success-color) !important;
+        }
+        .btn-status-completed {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+            color: white;
+        }
+        .btn-status-in-progress {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            color: white;
+        }
+        .btn-status-pending {
+            background-color: #f39c12;
+            border-color: #f39c12;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="#"><i class="fas fa-box-open me-2"></i>Smart Courier Hub</a>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><i class="fas fa-home"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-history"></i> History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-cog"></i> Settings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container my-5">
+        <div class="row">
+            <!-- Delivery List -->
+            <div class="col-lg-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>My Deliveries</h2>
+                    <span class="badge bg-primary">5 Active</span>
+                </div>
+                
+                <!-- Delivery Cards -->
+                <div class="delivery-card" id="delivery-card-1" onclick="selectDelivery(1)">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h5>Order #DEL-78945</h5>
+                            <p class="mb-1"><i class="fas fa-user"></i> John Smith</p>
+                            <p class="mb-1"><i class="fas fa-map-marker-alt"></i> 3.2 miles away</p>
+                        </div>
+                        <span class="delivery-status status-in-progress">In Progress</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="mb-0"><i class="fas fa-box"></i> Medium package</p>
+                            <p class="mb-0"><i class="fas fa-clock"></i> Due: Today 5:00 PM</p>
+                        </div>
+                        <button class="btn btn-primary btn-sm">View Details</button>
+                    </div>
+                </div>
+                
+                <div class="delivery-card" id="delivery-card-2" onclick="selectDelivery(2)">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h5>Order #DEL-78215</h5>
+                            <p class="mb-1"><i class="fas fa-user"></i> Sarah Johnson</p>
+                            <p class="mb-1"><i class="fas fa-map-marker-alt"></i> 1.5 miles away</p>
+                        </div>
+                        <span class="delivery-status status-pending">Pending</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="mb-0"><i class="fas fa-box"></i> Small package</p>
+                            <p class="mb-0"><i class="fas fa-clock"></i> Due: Tomorrow 11:00 AM</p>
+                        </div>
+                        <button class="btn btn-primary btn-sm">View Details</button>
+                    </div>
+                </div>
+                
+                <div class="delivery-card" id="delivery-card-3" onclick="selectDelivery(3)">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h5>Order #DEL-78123</h5>
+                            <p class="mb-1"><i class="fas fa-user"></i> Michael Brown</p>
+                            <p class="mb-1"><i class="fas fa-map-marker-alt"></i> 5.7 miles away</p>
+                        </div>
+                        <span class="delivery-status status-pending">Pending</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="mb-0"><i class="fas fa-box"></i> Large package</p>
+                            <p class="mb-0"><i class="fas fa-clock"></i> Due: Today 7:00 PM</p>
+                        </div>
+                        <button class="btn btn-primary btn-sm">View Details</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Delivery Details -->
+            <div class="col-lg-8">
+                <div id="delivery-details" class="form-card">
+                    <div class="text-center mb-4">
+                        <h3 id="delivery-id">Order #DEL-78945</h3>
+                        <p class="mb-0">Customer: <span id="customer-name">John Smith</span></p>
+                        <p>Delivery Due: <span id="delivery-due">Today 5:00 PM</span></p>
+                    </div>
+                    
+                    <!-- Status Timeline -->
+                    <div class="mb-4">
+                        <h5>Delivery Status</h5>
+                        <div class="timeline" id="status-timeline">
+                            <!-- Timeline will be generated dynamically -->
+                        </div>
+                    </div>
+                    
+                    <!-- Update Status -->
+                    <div class="mb-4">
+                        <h5>Update Status</h5>
+                        <div class="d-flex flex-wrap" id="status-buttons">
+                            <!-- Status buttons will be generated dynamically -->
+                        </div>
+                    </div>
+                    
+                    <!-- Delivery Map -->
+                    <div class="mb-4">
+                        <h5>Delivery Route</h5>
+                        <div class="map-container" id="delivery-map"></div>
+                        <div class="mt-2">
+                            <p class="mb-1"><strong>Pickup:</strong> <span id="pickup-address">123 Warehouse St, Industrial Area</span></p>
+                            <p class="mb-0"><strong>Delivery:</strong> <span id="delivery-address">456 Oak Ave, Residential District</span></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Package Details -->
+                    <div>
+                        <h5>Package Details</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Size:</strong> <span id="package-size">Medium</span></p>
+                                <p><strong>Weight:</strong> <span id="package-weight">2.5 kg</span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Contents:</strong> <span id="package-contents">Electronics</span></p>
+                                <p><strong>Special Instructions:</strong> <span id="special-instructions">Fragile - Handle with care</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="no-delivery-selected" class="form-card text-center hidden">
+                    <div class="not-found">
+                        <i class="fas fa-truck not-found-icon"></i>
+                        <h3>No Delivery Selected</h3>
+                        <p>Please select a delivery from the list to view details and update status.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Initialize the map when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initMap();
+            // Hide details initially and show "no delivery selected" message
+            document.getElementById('delivery-details').classList.add('hidden');
+        });
+        
+        // Current selected delivery ID
+        let currentDeliveryId = null;
+        
+        // Dummy delivery data
+        const deliveries = {
+            1: {
+                id: "DEL-78945",
+                customer: "John Smith",
+                due: "Today 5:00 PM",
+                status: "In Progress",
+                packageSize: "Medium",
+                packageWeight: "2.5 kg",
+                packageContents: "Electronics",
+                instructions: "Fragile - Handle with care",
+                pickup: "123 Warehouse St, Industrial Area",
+                delivery: "456 Oak Ave, Residential District",
+                currentStatusIndex: 2, // Index of current status in statusOptions
+                timeline: [
+                    { status: "Order Processed", time: "June 12, 10:30 AM", completed: true },
+                    { status: "Parcel Collected", time: "June 12, 11:45 AM", completed: true },
+                    { status: "In Transit", time: "June 12, 12:30 PM", completed: true },
+                    { status: "At Local Facility", time: "Pending", completed: false },
+                    { status: "Out for Delivery", time: "Pending", completed: false },
+                    { status: "Delivered", time: "Pending", completed: false }
+                ]
+            },
+            2: {
+                id: "DEL-78215",
+                customer: "Sarah Johnson",
+                due: "Tomorrow 11:00 AM",
+                status: "Pending",
+                packageSize: "Small",
+                packageWeight: "0.8 kg",
+                packageContents: "Documents",
+                instructions: "Require signature upon delivery",
+                pickup: "789 Business Center, Downtown",
+                delivery: "321 Pine Rd, Suburbia",
+                currentStatusIndex: 1, // Index of current status in statusOptions
+                timeline: [
+                    { status: "Order Processed", time: "June 12, 9:15 AM", completed: true },
+                    { status: "Parcel Collected", time: "June 12, 10:30 AM", completed: true },
+                    { status: "In Transit", time: "Pending", completed: false },
+                    { status: "At Local Facility", time: "Pending", completed: false },
+                    { status: "Out for Delivery", time: "Pending", completed: false },
+                    { status: "Delivered", time: "Pending", completed: false }
+                ]
+            },
+            3: {
+                id: "DEL-78123",
+                customer: "Michael Brown",
+                due: "Today 7:00 PM",
+                status: "Pending",
+                packageSize: "Large",
+                packageWeight: "5.2 kg",
+                packageContents: "Home Goods",
+                instructions: "Leave at front door if no answer",
+                pickup: "555 Distribution Center, Northside",
+                delivery: "888 Maple Dr, Uptown",
+                currentStatusIndex: 0, // Index of current status in statusOptions
+                timeline: [
+                    { status: "Order Processed", time: "June 12, 8:00 AM", completed: true },
+                    { status: "Parcel Collected", time: "Pending", completed: false },
+                    { status: "In Transit", time: "Pending", completed: false },
+                    { status: "At Local Facility", time: "Pending", completed: false },
+                    { status: "Out for Delivery", time: "Pending", completed: false },
+                    { status: "Delivered", time: "Pending", completed: false }
+                ]
+            }
+        };
+        
+        // Status options in order
+        const statusOptions = [
+            "Order Processed",
+            "Parcel Collected",
+            "In Transit",
+            "At Local Facility",
+            "Out for Delivery",
+            "Delivered"
+        ];
+        
+        let map;
+        let directionsService;
+        let directionsRenderer;
+        
+        function initMap() {
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer();
+            
+            // Default map centered on a generic location
+            map = new google.maps.Map(document.getElementById("delivery-map"), {
+                zoom: 12,
+                center: { lat: 40.7128, lng: -74.0060 }, // Default to New York
+            });
+            
+            directionsRenderer.setMap(map);
+        }
+        
+        function selectDelivery(deliveryId) {
+            currentDeliveryId = deliveryId;
+            const delivery = deliveries[deliveryId];
+            
+            // Update the delivery details
+            document.getElementById('delivery-id').textContent = `Order #${delivery.id}`;
+            document.getElementById('customer-name').textContent = delivery.customer;
+            document.getElementById('delivery-due').textContent = delivery.due;
+            document.getElementById('package-size').textContent = delivery.packageSize;
+            document.getElementById('package-weight').textContent = delivery.packageWeight;
+            document.getElementById('package-contents').textContent = delivery.packageContents;
+            document.getElementById('special-instructions').textContent = delivery.instructions;
+            document.getElementById('pickup-address').textContent = delivery.pickup;
+            document.getElementById('delivery-address').textContent = delivery.delivery;
+            
+            // Update the timeline
+            updateTimeline(delivery);
+            
+            // Update status buttons
+            updateStatusButtons(delivery);
+            
+            // Show the details and hide the "no delivery selected" message
+            document.getElementById('delivery-details').classList.remove('hidden');
+            document.getElementById('no-delivery-selected').classList.add('hidden');
+            
+            // Update the map with route
+            calculateAndDisplayRoute(delivery.pickup, delivery.delivery);
+            
+            // Update the status badge in the delivery card
+            updateDeliveryCardStatus(deliveryId, delivery.currentStatusIndex);
+        }
+        
+        function updateTimeline(delivery) {
+            const timeline = document.getElementById('status-timeline');
+            timeline.innerHTML = '';
+            
+            delivery.timeline.forEach((item, index) => {
+                let statusClass = '';
+                let dotClass = '';
+                
+                if (item.completed) {
+                    statusClass = 'completed';
+                    dotClass = 'completed';
+                } else if (index === delivery.currentStatusIndex) {
+                    statusClass = 'in-progress';
+                    dotClass = 'in-progress';
+                }
+                
+                const timelineItem = document.createElement('div');
+                timelineItem.className = `timeline-item ${statusClass}`;
+                timelineItem.innerHTML = `
+                    <div class="timeline-dot ${dotClass}"></div>
+                    <div class="timeline-content">
+                        <p class="mb-1"><strong>${item.status}</strong></p>
+                        <p class="text-muted small mb-0">${item.time}</p>
+                    </div>
+                `;
+                timeline.appendChild(timelineItem);
+            });
+        }
+        
+        function updateStatusButtons(delivery) {
+            const statusButtonsContainer = document.getElementById('status-buttons');
+            statusButtonsContainer.innerHTML = '';
+            
+            statusOptions.forEach((status, index) => {
+                const button = document.createElement('button');
+                button.className = 'btn status-btn';
+                button.textContent = status;
+                
+                if (index < delivery.currentStatusIndex) {
+                    // Past statuses
+                    button.classList.add('btn-status-completed', 'disabled');
+                } else if (index === delivery.currentStatusIndex) {
+                    // Current status
+                    button.classList.add('btn-status-in-progress');
+                } else {
+                    // Future statuses
+                    button.classList.add('btn-outline-secondary');
+                }
+                
+                // Only allow clicking on current or next status
+                if (index <= delivery.currentStatusIndex + 1) {
+                    button.addEventListener('click', () => updateDeliveryStatus(index));
+                } else {
+                    button.disabled = true;
+                }
+                
+                statusButtonsContainer.appendChild(button);
+            });
+        }
+        
+        function updateDeliveryStatus(newStatusIndex) {
+            if (!currentDeliveryId) return;
+            
+            const delivery = deliveries[currentDeliveryId];
+            
+            // Can't go backward in status
+            if (newStatusIndex < delivery.currentStatusIndex) return;
+            
+            // Update the current status index
+            delivery.currentStatusIndex = newStatusIndex;
+            
+            // Update timeline completion status
+            delivery.timeline.forEach((item, index) => {
+                item.completed = index <= newStatusIndex;
+                if (index === newStatusIndex) {
+                    // Update the time for the new status
+                    const now = new Date();
+                    const hours = now.getHours().toString().padStart(2, '0');
+                    const minutes = now.getMinutes().toString().padStart(2, '0');
+                    item.time = `Today ${hours}:${minutes}`;
+                }
+            });
+            
+            // Update the delivery status text
+            delivery.status = statusOptions[newStatusIndex];
+            
+            // Update the UI
+            updateTimeline(delivery);
+            updateStatusButtons(delivery);
+            updateDeliveryCardStatus(currentDeliveryId, newStatusIndex);
+            
+            // In a real app, you would send this update to the server here
+            console.log(`Updated delivery ${currentDeliveryId} to status: ${statusOptions[newStatusIndex]}`);
+        }
+        
+        function updateDeliveryCardStatus(deliveryId, statusIndex) {
+            const deliveryCard = document.getElementById(`delivery-card-${deliveryId}`);
+            if (!deliveryCard) return;
+            
+            const statusBadge = deliveryCard.querySelector('.delivery-status');
+            if (!statusBadge) return;
+            
+            // Clear all status classes
+            statusBadge.className = 'delivery-status';
+            
+            // Set the appropriate status class and text
+            if (statusIndex === statusOptions.length - 1) {
+                // Delivered
+                statusBadge.classList.add('status-completed');
+                statusBadge.textContent = 'Delivered';
+            } else if (statusIndex > 1) {
+                // In Progress (any status after "Parcel Collected")
+                statusBadge.classList.add('status-in-progress');
+                statusBadge.textContent = 'In Progress';
+            } else {
+                // Pending (Order Processed or Parcel Collected)
+                statusBadge.classList.add('status-pending');
+                statusBadge.textContent = 'Pending';
+            }
+        }
+        
+        function calculateAndDisplayRoute(start, end) {
+            directionsService.route(
+                {
+                    origin: start,
+                    destination: end,
+                    travelMode: google.maps.TravelMode.DRIVING,
+                    provideRouteAlternatives: true,
+                },
+                (response, status) => {
+                    if (status === "OK") {
+                        directionsRenderer.setDirections(response);
+                        
+                        // Find the shortest route
+                        let shortestRoute = response.routes[0];
+                        for (let i = 1; i < response.routes.length; i++) {
+                            if (response.routes[i].legs[0].distance.value < shortestRoute.legs[0].distance.value) {
+                                shortestRoute = response.routes[i];
+                            }
+                        }
+                        
+                        // Display the shortest route
+                        directionsRenderer.setDirections({
+                            routes: [shortestRoute]
+                        });
+                    } else {
+                        window.alert("Directions request failed due to " + status);
+                    }
+                }
+            );
+        }
+    </script>
+</body>
+</html>
